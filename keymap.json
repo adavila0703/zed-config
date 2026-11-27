@@ -1,0 +1,173 @@
+// Zed keymap — ported from github.com/adavila0703/nvim (lua/angel/core/keymaps.lua + plugins)
+// Leader = space. Previous version saved as keymap.json.bak.
+// Docs: https://zed.dev/docs/key-bindings  |  `zed: open default keymap` to see defaults.
+[
+  // ---------------------------------------------------------------- insert
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "j k": "vim::NormalBefore",
+      "ctrl-space": "editor::ShowCompletions"
+    }
+  },
+
+  // ---------------------------------------------------------------- nvim-cmp
+  // tab / shift-tab cycle the completion menu, enter confirms
+  {
+    "context": "Editor && showing_completions",
+    "bindings": {
+      "tab": "editor::ContextMenuNext",
+      "shift-tab": "editor::ContextMenuPrevious",
+      "enter": "editor::ConfirmCompletion"
+    }
+  },
+
+  // ---------------------------------------------------------------- vim-tmux-navigator
+  // ctrl-h/j/k/l moves between splits, the project panel, and the terminal panel.
+  {
+    "context": "(Editor && (vim_mode == normal || vim_mode == visual) && !menu) || EmptyPane || (ProjectPanel && not_editing) || Terminal",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight"
+    }
+  },
+
+  // ---------------------------------------------------------------- global leader
+  // Workspace-level leader keys: work in a normal-mode editor, an empty pane
+  // (no file open) and the project panel.
+  {
+    "context": "(Editor && vim_mode == normal && !menu) || EmptyPane || (ProjectPanel && not_editing)",
+    "bindings": {
+      // telescope -> file finder / project search
+      "space f f": "file_finder::Toggle",
+      "space f s": "pane::DeploySearch",
+
+      // nvim-tree -> project panel
+      "space e e": "workspace::ToggleLeftDock",
+
+      // harpoon menu / terminal
+      "space h e": "tab_switcher::Toggle",
+      "space h t": "terminal_panel::ToggleFocus",
+
+      // tmux-sessionizer equivalent
+      "ctrl-f": "projects::OpenRecent",
+
+      // windows
+      "space s v": "pane::SplitRight",
+      "space s h": "pane::SplitDown",
+      "space s e": "vim::ResetPaneSizes",
+      "space s x": "pane::CloseAllItems",
+
+      // tabs
+      "space t o": "workspace::NewFile",
+      "space t x": "pane::CloseActiveItem",
+      "space t n": "pane::ActivateNextItem",
+      "space t p": "pane::ActivatePreviousItem",
+
+      // git / ai
+      "space g v": ["task::Spawn", { "task_name": "lazygit" }],
+      "space l g": ["task::Spawn", { "task_name": "lazygit" }],
+      "space g c": "agent::ToggleFocus"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "space e c": "project_panel::CollapseAllEntries"
+    }
+  },
+
+  // ---------------------------------------------------------------- normal (editor only)
+  {
+    "context": "Editor && vim_mode == normal && !menu",
+    "bindings": {
+      "space n h": ["workspace::SendKeystrokes", ": n o h enter"],
+
+      // search word under cursor across project
+      "space f c": "pane::DeploySearch",
+      "space f w s": "pane::DeploySearch",
+      "space f shift-w s": "pane::DeploySearch",
+
+      // harpoon (approximation: pin tab = mark, tab N = mark N)
+      "space h a": "pane::TogglePinTab",
+      "space h 1": ["pane::ActivateItem", 0],
+      "space h 2": ["pane::ActivateItem", 1],
+      "space h 3": ["pane::ActivateItem", 2],
+      "space h 4": ["pane::ActivateItem", 3],
+      "space h 5": ["pane::ActivateItem", 4],
+      "space h 6": ["pane::ActivateItem", 5],
+      "space h 7": ["pane::ActivateItem", 6],
+      "space h 8": ["pane::ActivateItem", 7],
+      "space h 9": ["pane::ActivateItem", 8],
+      "space h 0": "pane::ActivateLastItem",
+
+      // primeagen: nzzzv / Nzzzv
+      "n": ["action::Sequence", ["vim::MoveToNextMatch", "editor::ScrollCursorCenter"]],
+      "shift-n": ["action::Sequence", ["vim::MoveToPreviousMatch", "editor::ScrollCursorCenter"]],
+      "space r": "editor::SelectAllMatches",
+
+      "space t f": "pane::SplitRight",
+      "space e f": "pane::RevealInProjectPanel",
+
+      // git
+      "space g b": "git::Blame",
+      "space g e": "editor::ToggleEditPrediction",
+      "space g d": "editor::ToggleEditPrediction",
+
+      // lsp
+      "g d": "editor::GoToDefinition",
+      "g shift-d": "editor::GoToDeclaration",
+      "g i": "editor::GoToImplementation",
+      "g r": "editor::FindAllReferences",
+      "shift-k": "editor::Hover",
+      "[ d": "editor::GoToPreviousDiagnostic",
+      "] d": "editor::GoToDiagnostic",
+      "space c s": "project_symbols::Toggle",
+      "space c a": "editor::ToggleCodeActions",
+      "space c r": "editor::FindAllReferences",
+      "space c n": "editor::Rename",
+      "space r n": "editor::Rename",
+      "space c h": "editor::ShowSignatureHelp",
+      "space c d o": "editor::Hover",
+      "space c d n": "editor::GoToDiagnostic",
+      "space c d p": "editor::GoToPreviousDiagnostic",
+      "space m p": "editor::Format",
+
+      // utils
+      "space y f": "editor::CopyPath",
+
+      // folding
+      "z a": "editor::ToggleFold",
+      "z shift-a": "editor::ToggleFoldRecursive",
+      "z o": "editor::UnfoldLines",
+      "z shift-o": "editor::UnfoldRecursive",
+      "z c": "editor::Fold",
+      "z shift-c": "editor::FoldRecursive",
+      "z m": "editor::FoldAll",
+      "z shift-m": "editor::FoldAll",
+      "z r": "editor::UnfoldAll",
+      "z shift-r": "editor::UnfoldAll",
+      "space z f": "editor::ToggleFold",
+      "space z shift-f": "editor::ToggleFoldRecursive",
+      "space z o": "editor::UnfoldLines",
+      "space z c": "editor::Fold",
+      "space z shift-m": "editor::FoldAll",
+      "space z shift-r": "editor::UnfoldAll"
+    }
+  },
+
+  // ---------------------------------------------------------------- visual
+  {
+    "context": "Editor && vim_mode == visual && !menu",
+    "bindings": {
+      "space p": ["vim::Paste", { "preserve_clipboard": true }],
+      "shift-j": "editor::MoveLineDown",
+      "shift-k": "editor::MoveLineUp",
+      "space m p": "editor::Format",
+      "space z f": "editor::FoldSelectedRanges",
+      "space z d": "editor::UnfoldLines"
+    }
+  }
+]
