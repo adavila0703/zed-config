@@ -69,12 +69,28 @@
       // git / ai
       "space g v": ["task::Spawn", { "task_name": "lazygit" }],
       "space l g": ["task::Spawn", { "task_name": "lazygit" }],
-      "space g c": "agent::ToggleFocus"
+      "space g c": "agent::ToggleFocus",
+
+      // docks (space d ...)
+      // whole docks: open / close
+      "space d l": "workspace::ToggleLeftDock",
+      "space d r": "workspace::ToggleRightDock",
+      "space d j": "workspace::ToggleBottomDock",
+      // left: AI chat, file explorer
+      "space d a": "agent::ToggleFocus",
+      "space d e": "project_panel::ToggleFocus",
+      // right: outline, git changes
+      "space d o": "outline_panel::ToggleFocus",
+      "space d g": "git_panel::ToggleFocus",
+      // bottom: terminal, debugger
+      "space d t": "terminal_panel::ToggleFocus",
+      "space d b": "debug_panel::ToggleFocus"
     }
   },
   {
     "context": "ProjectPanel && not_editing",
     "bindings": {
+      "space": null,
       "space e c": "project_panel::CollapseAllEntries"
     }
   },
@@ -83,6 +99,9 @@
   {
     "context": "Editor && vim_mode == normal && !menu",
     "bindings": {
+      // unbind vim's bare `space` (move right) so `space ...` leader chords
+      // have no conflict -> no 1s timeout, which-key stays open
+      "space": null,
       "space n h": ["workspace::SendKeystrokes", ": n o h enter"],
 
       // search word under cursor across project
@@ -162,6 +181,7 @@
   {
     "context": "Editor && vim_mode == visual && !menu",
     "bindings": {
+      "space": null,
       "space p": ["vim::Paste", { "preserve_clipboard": true }],
       "shift-j": "editor::MoveLineDown",
       "shift-k": "editor::MoveLineUp",
